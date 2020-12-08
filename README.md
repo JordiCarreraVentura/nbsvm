@@ -7,7 +7,7 @@ Pipeline based on the NBSVM algorithm forked from [this implementation](https://
 `ENV="nbsvm"; virtualenv -p /usr/local/opt/python@3.7/bin/python3.7 $ENV; cd $ENV; source bin/activate; pip install nltk numpy pandas scipy sklearn`
 
 # Usage
-`python nbsvm.py --train train.tsv --test test.tsv --text_row 0 --class_row 1 --ngram 123`    
+`python nbsvm.py --train train.tsv --test test.tsv --text_row 0 --class_row 1 --ngram 123`
     
     
 # References
@@ -17,10 +17,10 @@ Pipeline based on the NBSVM algorithm forked from [this implementation](https://
 
 
 # Next steps
+**TODO**
 
 
-
-## old README
+## Original README
 
 # Multiclass Naive Bayes SVM (NB-SVM)
 Luis Rei 
