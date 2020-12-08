@@ -153,39 +153,36 @@ def load_data(data_path, text_row, class_row, dic, v, ratios, grams):
     X = dict()
     Y = dict()
     data = dict()
-    indptr = [0]
-    indices = []
     for c in classes:
         Y[c] = np.zeros(n_samples, dtype=np.int64)
         data[c] = []
 
     df = pd.read_csv(data_path, sep=';')
     lines = df['text']
-    classes = df['label']
+    labels = df['label']
     
     n = 0
-    for text, t in zip(lines, classes):
+    D = dict([
+        (c, [[0.0 for g in range(v)] for _ in range(n_samples)])
+        for c in classes
+    ])
+    for docid, (text, t) in enumerate(zip(lines, labels)):
         for c in classes:
-            Y[c][n] = int(c == t)
+            if c == t:
+                Y[c][n] = 1
         Y_real[n] = t
 
         ngrams = tokenize(text, grams)
         for g in ngrams:
             if g in dic:
                 index = dic[g]
-                indices.append(index)
-                for c in classes:
-                    # X[c][n][idx] = ratios[c][idx]
-                    data[c].append(ratios[c][index])
-        indptr.append(len(indices))
-
+                D[c][n][index] = ratios[c][index]
         n += 1
 
     for c in classes:
-        X[c] = csr_matrix((data[c], indices, indptr), shape=(n_samples, v),
-                          dtype=np.float32)
+        X[c] = csr_matrix(D[c])
 
-    return X, Y, Y_real
+    return X, Y, labels
 
 
 def save_counters(counters, filepath):
