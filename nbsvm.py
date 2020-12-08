@@ -214,7 +214,7 @@ def main(train, test, text_row, class_row, ngram, debug_counters=None):
 
     dic, ratios, v = compute_ratios(counters)
     classes = ratios.keys()
-    print v
+    print(v)
 
     print('Loading Data')
     Xs_train, Ys_train, y_train = load_data(train, text_row, class_row,
@@ -248,6 +248,7 @@ def main(train, test, text_row, class_row, ngram, debug_counters=None):
     # finally the scores
     acc_svm = accuracy_score(y_true, pred)
     print('NBSVM: %f' % (acc_svm,))
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run NB-SVM.')
