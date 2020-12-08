@@ -136,11 +136,9 @@ def compute_ratios(counters, alpha=1.0):
 def count_lines(data_file):
     """Counts the number of lines in a file
     """
-    lines = 0
-    with open(data_file) as f:
-        for line in f:
-            lines += 1
-    return lines
+    df = pd.read_csv(data_file, sep=';')
+    lines = df['text']
+    return len(lines)
 
 
 def load_data(data_path, text_row, class_row, dic, v, ratios, grams):
