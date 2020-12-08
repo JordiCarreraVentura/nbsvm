@@ -23,13 +23,14 @@ import numpy as np
 import pandas as pd
 import argparse
 from collections import Counter
+from nltk import wordpunct_tokenize as tokenizer
 from scipy.sparse import csr_matrix
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
 
 
 def tokenize(sentence, grams):
-    words = sentence.split()
+    words = [w.lower() for w in tokenizer(sentence) if w.isalpha()]
     tokens = []
     for gram in grams:
         for i in range(len(words) - gram + 1):
