@@ -5,3 +5,5 @@ pyvenv.cfg
 
 # Python cache
 __pycache__/*
+test.tsv
+train.tsv
