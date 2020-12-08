@@ -50,7 +50,7 @@ def build_counters(filepath, grams, text_row, class_row):
     
     df = pd.read_csv(filepath, sep=';')
     lines = df['text']
-    classes = df['label']    
+    classes = df['label']
 
     n = 0
     for text, c in zip(lines, classes):
