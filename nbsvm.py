@@ -20,6 +20,7 @@ Naive Bayes SVM by Grégoire Mesnil
 
 import sys
 import numpy as np
+import pandas as pd
 import argparse
 from collections import Counter
 from scipy.sparse import csr_matrix
@@ -45,28 +46,23 @@ def build_counters(filepath, grams, text_row, class_row):
         class_row, row in the tsv file where the class is stored
     """
     counters = {}
+    
+    df = pd.read_csv(filepath, sep=';')
+    lines = df['text']
+    classes = df['label']    
 
-    with open(filepath) as tsvfile:
-        n = 0
-        for line in tsvfile:
-            row = line.split('\t')
-            try:
-                c = int(row[class_row])
-            except:
-                print n
-                print class_row
-                print row[class_row]
-                print filepath
-                sys.exit(0)
-            n = n + 1
-            # Select class counter
-            if c not in counters:
-                # we don't have a counter for this class
-                counters[c] = Counter()
-            counter = counters[c]
+    n = 0
+    for text, c in zip(lines, classes):
 
-            # update counter
-            counter.update(tokenize(row[text_row], grams))
+        n = n + 1
+        # Select class counter
+        if c not in counters:
+            # we don't have a counter for this class
+            counters[c] = Counter()
+        counter = counters[c]
+
+        # update counter
+        counter.update(tokenize(text, grams))
 
     return counters
 
@@ -164,33 +160,27 @@ def load_data(data_path, text_row, class_row, dic, v, ratios, grams):
         Y[c] = np.zeros(n_samples, dtype=np.int64)
         data[c] = []
 
-    with open(data_path) as tsvfile:
-        n = 0
-        for line in tsvfile:
-            row = line.split('\t')
-            try:
-                t = int(row[class_row])
-            except:
-                print n
-                print class_row
-                print data_path
-                sys.exit(0)
+    df = pd.read_csv(data_path, sep=';')
+    lines = df['text']
+    classes = df['label']
+    
+    n = 0
+    for text, t in zip(lines, classes):
+        for c in classes:
+            Y[c][n] = int(c == t)
+        Y_real[n] = t
 
-            for c in classes:
-                Y[c][n] = int(c == t)
-            Y_real[n] = t
+        ngrams = tokenize(text, grams)
+        for g in ngrams:
+            if g in dic:
+                index = dic[g]
+                indices.append(index)
+                for c in classes:
+                    # X[c][n][idx] = ratios[c][idx]
+                    data[c].append(ratios[c][index])
+        indptr.append(len(indices))
 
-            ngrams = tokenize(row[text_row], grams)
-            for g in ngrams:
-                if g in dic:
-                    index = dic[g]
-                    indices.append(index)
-                    for c in classes:
-                        # X[c][n][idx] = ratios[c][idx]
-                        data[c].append(ratios[c][index])
-            indptr.append(len(indices))
-
-            n += 1
+        n += 1
 
     for c in classes:
         X[c] = csr_matrix((data[c], indices, indptr), shape=(n_samples, v),
