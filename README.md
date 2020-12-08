@@ -1,3 +1,27 @@
+
+# Overview
+
+Pipeline based on the NBSVM algorithm forked from [this implementation](https://github.com/lrei/nbsvm).
+
+# Installation
+`ENV="nbsvm"; virtualenv -p /usr/local/opt/python@3.7/bin/python3.7 $ENV; cd $ENV; source bin/activate; pip install nltk numpy pandas scipy sklearn`
+
+# Usage
+`python nbsvm.py --train train.tsv --test test.tsv --text_row 0 --class_row 1 --ngram 123`    
+    
+    
+# References
+- [code repository](https://github.com/sidaw/nbsvm) associated to the original paper.
+- [original Python implementation forked to create the current repository](https://github.com/lrei/nbsvm).
+- [an alternative implementation](https://github.com/mesnilgr/nbsvm), deprecated.
+
+
+# Next steps
+
+
+
+## old README
+
 # Multiclass Naive Bayes SVM (NB-SVM)
 Luis Rei 
 luis.rei@ijs.si 
