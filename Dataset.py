@@ -101,10 +101,7 @@ class TwentyNewsgroupsWrapper:
 
 
 if __name__ == '__main__':
-    d = TwentyNewsgroupsWrapper()
-    for x in d:
-        continue
-    
+    d = TwentyNewsgroupsWrapper(randomize=True)
     train, test = d.split()
     d.save(train, test)
 
